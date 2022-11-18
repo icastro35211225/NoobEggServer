@@ -41,7 +41,7 @@
         //EXAMPLE INSERT
         //const sqlInsert = "INSERT INTO items (ProductPrice, ProductDesc, ProductImage, ProductStock) VALUES (?, ?, ?, ?);";
         //db.query(sqlInsert, [item, itemDescription, itemImage, itemStock], (err, result) => {
-        const sqlInsert = "INSERT INTO products (productID, description, name) values (?, ?, ?)";
+        const sqlInsert = "INSERT INTO products (ProductID, ProductDesc, productName) values (?, ?, ?)";
         db.query(sqlInsert, [itemID, itemDescription, itemName], (err, res) => {
             if (err) throw err;
             else { console.log(res); }
@@ -115,11 +115,12 @@
         const desc = req.body.desc;
         const price = req.body.price;
         const quantity = req.body.quantity;
-        const imgPath = req.body.imgPath;
+        let imgPath = req.body.imgPath;
 
-	if(!imagepath){
-	   imagePath = 'images/null.png';
-	}
+	    if(!imgPath){
+	        imgPath = 'https://mnapoli.fr/images/posts/null.png';
+	    }
+        
         const sqlInsertItem = "INSERT INTO products (ProductName, ProductDesc, ProductPrice, ProductStock, ProductImage) VALUES (?, ?, ?, ?, ?);";
         db.query(sqlInsertItem, [name, desc, price, quantity, imgPath], (err, result) => {
             if (err) {
