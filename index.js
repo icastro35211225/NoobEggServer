@@ -228,7 +228,7 @@ app.post("/api/addToCart", (req, res) => {
 app.delete("/api/delinstscart/:productID", (req, res) => {
   const productID = req.params.productID;
 
-  const sql = "DEELTE FROM cart WHERE ProductID = ?";
+  const sql = "DELETE FROM cart WHERE ProductID = ?";
 
   db.query(sql, productID, (err, result) => {
     if (err) res.send({ err: err });
@@ -239,7 +239,18 @@ app.delete("/api/delinstscart/:productID", (req, res) => {
 app.delete("/api/deleteProduct/:productID", (req, res) => {
   const productID = req.params.productID;
 
-  const sql = "DEELTE FROM cart WHERE ProductID = ?";
+  const sql = "DELETE FROM cart WHERE ProductID = ?";
+
+  db.query(sql, productID, (err, result) => {
+    if (err) res.send({ err: err });
+    res.send(result);
+  });
+});
+
+app.delete("/api/clearCart/:userID", (req, res) => {
+  const productID = req.params.userID;
+
+  const sql = "DELETE FROM cart WHERE userID = ?";
 
   db.query(sql, productID, (err, result) => {
     if (err) res.send({ err: err });
