@@ -30,24 +30,6 @@
         });
     })
 
-    app.post('/api/insert', (req, res) => {
-
-        const itemName = req.body.itemName;
-        const itemID = req.body.itemID;
-        const itemDescription = req.body.itemDescription;
-        //const itemImage = req.body.itemImage;
-        //const itemStock = req.body.itemStock;
-        console.log(itemName);
-        //EXAMPLE INSERT
-        //const sqlInsert = "INSERT INTO items (ProductPrice, ProductDesc, ProductImage, ProductStock) VALUES (?, ?, ?, ?);";
-        //db.query(sqlInsert, [item, itemDescription, itemImage, itemStock], (err, result) => {
-        const sqlInsert = "INSERT INTO products (ProductID, ProductDesc, productName) values (?, ?, ?)";
-        db.query(sqlInsert, [itemID, itemDescription, itemName], (err, res) => {
-            if (err) throw err;
-            else { console.log(res); }
-        });
-    });
-
     app.post('/api/signup', (req, res) => {
 
         const fName = req.body.fName;
@@ -64,7 +46,7 @@
 
     app.delete('/api/delete/:itemName', (req, res) => {
         const name = req.params.itemName;
-        const sqlDelete = "DELETE FROM items WHERE name = ?";
+        const sqlDelete = "DELETE FROM Products WHERE ProductName = ?";
 
         db.query(sqlDelete, name, (err, result) => {
             if (err) console.log(err);
