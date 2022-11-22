@@ -239,7 +239,7 @@ app.delete("/api/delinstscart/:productID", (req, res) => {
 app.delete("/api/deleteProduct/:productID", (req, res) => {
   const productID = req.params.productID;
 
-  const sql = "DELETE FROM cart WHERE ProductID = ?";
+  const sql = "DELETE FROM products WHERE ProductID = ?";
 
   db.query(sql, productID, (err, result) => {
     if (err) res.send({ err: err });
