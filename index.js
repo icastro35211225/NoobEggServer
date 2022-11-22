@@ -252,7 +252,7 @@ app.post("/api/addCode", (req, res) => {
 
 app.delete("/api/deleteCode/:codeID", (req, res) => {
   const codeID = req.params.codeID;
-  const sql = "DELETE FROM codes WHERE codeID = ?";
+  const sql = "DELETE FROM codes WHERE dCode = ?";
 
   db.query(sql, codeID, (err, result) => {
     if (err) res.send({ err: err });
