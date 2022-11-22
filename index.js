@@ -242,7 +242,7 @@ app.post("/api/addCode", (req, res) => {
   const disCode = req.body.code;
   const mult = req.body.mult;
 
-  const sql = "INSERT INTO codes (disCode, mult) VALUES (?, ?)";
+  const sql = "INSERT INTO codes (dCode, mul) VALUES (?, ?)";
 
   db.query(sql, [disCode, mult], (err, result) => {
     if (err) res.send({ err: err });
@@ -256,6 +256,7 @@ app.delete("/api/deleteCode/:codeID", (req, res) => {
 
   db.query(sql, codeID, (err, result) => {
     if (err) res.send({ err: err });
+    res.send(result);
   });
 });
 
