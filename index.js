@@ -129,6 +129,28 @@ app.get("/api/getProduct", (req, res) => {
     res.send(result);
   });
 });
+// This is a GET
+app.get("/api/getProduct", (req, res) => {
+  const id = req.body.id;
+  const sql = "SELECT * FROM products WHERE ProductID = ?";
+
+  db.query(sql, id, (err, result) => {
+    if (err) console.log(err);
+    res.send(result);
+  });
+});
+
+// This is a POST
+app.post("/api/getProduct", (req, res) => {
+  const id = req.body.id;
+
+  const sql = "SELECT * FROM products WHERE ProductID = ?";
+
+  db.query(sql, id, (err, result) => {
+    if (err) res.send({ err: err });
+    res.send(result);
+  });
+});
 
 app.delete("/api/delinstscart/:productID", (req, res) => {
   const productID = req.params.productID;
