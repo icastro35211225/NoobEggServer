@@ -20,12 +20,13 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/api/get", (req, res) => {
-  //EXAMPLE SELECT
   const sqlSelect = "SELECT * FROM products";
   db.query(sqlSelect, (err, result) => {
     res.send(result);
   });
 });
+
+//---------------------------ACCOUNT-----------------------------------
 
 app.post("/api/signup", (req, res) => {
   const fName = req.body.fName;
@@ -41,35 +42,6 @@ app.post("/api/signup", (req, res) => {
   });
 });
 
-app.delete("/api/delete/:itemName", (req, res) => {
-  const name = req.params.itemName;
-  const sqlDelete = "DELETE FROM Products WHERE ProductName = ?";
-
-  db.query(sqlDelete, name, (err, result) => {
-    if (err) console.log(err);
-  });
-});
-
-app.get("/api/getProduct", (req, res) => {
-  const id = req.body.id;
-  const sql = "SELECT * FROM products WHERE ProductID = ?";
-
-  db.query(sql, id, (err, result) => {
-    if (err) console.log(err);
-    res.send(result);
-  });
-});
-
-app.post("/api/getProduct", (req, res) => {
-  const id = req.body.id;
-
-  const sql = "SELECT * FROM products WHERE ProductID = ?";
-
-  db.query(sql, id, (err, result) => {
-    if (err) res.send({ err: err });
-    res.send(result);
-  });
-});
 app.post("/api/login", (req, res) => {
   //res.send({message: "This works"});
 
@@ -88,6 +60,29 @@ app.post("/api/login", (req, res) => {
     }
   });
 });
+
+app.put("/api/updateAccount", (req, res) => {
+  const userID = req.body.userID;
+  const fName = req.body.fName;
+  const lName = req.body.lName;
+  const email = req.body.email;
+  const pass = req.body.password;
+  const address = req.body.address;
+
+  const sql =
+    "UPDATE users SET FirstName = ?, LastName = ?, Email = ?, Username = ?, Pass = ?, shipAddress = ? WHERE UserID = ?";
+
+  db.query(
+    sql,
+    [fName, lName, email, email, pass, address, userID],
+    (err, result) => {
+      if (err) res.send({ err: err });
+      res.send(result);
+    }
+  );
+});
+
+//-----------------------------PRODUCTS------------------------------------
 
 app.post("/api/additem", (req, res) => {
   const name = req.body.name;
@@ -114,6 +109,47 @@ app.post("/api/additem", (req, res) => {
       }
     }
   );
+});
+
+app.delete("/api/delete/:itemName", (req, res) => {
+  const name = req.params.itemName;
+  const sqlDelete = "DELETE FROM Products WHERE ProductName = ?";
+
+  db.query(sqlDelete, name, (err, result) => {
+    if (err) console.log(err);
+  });
+});
+
+app.get("/api/getProduct", (req, res) => {
+  const id = req.body.id;
+  const sql = "SELECT * FROM products WHERE ProductID = ?";
+
+  db.query(sql, id, (err, result) => {
+    if (err) console.log(err);
+    res.send(result);
+  });
+});
+
+app.delete("/api/delinstscart/:productID", (req, res) => {
+  const productID = req.params.productID;
+
+  const sql = "DELETE FROM cart WHERE ProductID = ?";
+
+  db.query(sql, productID, (err, result) => {
+    if (err) res.send({ err: err });
+    res.send(result);
+  });
+});
+
+app.delete("/api/deleteProduct/:productID", (req, res) => {
+  const productID = req.params.productID;
+
+  const sql = "DELETE FROM products WHERE ProductID = ?";
+
+  db.query(sql, productID, (err, result) => {
+    if (err) res.send({ err: err });
+    res.send(result);
+  });
 });
 
 app.post("/api/cart", (req, res) => {
@@ -153,6 +189,24 @@ app.get("/api/getOrders/:orderID", (req, res) => {
   });
 });
 
+app.put("/api/updateProduct", (req, res) => {
+  const id = req.body.id;
+  const name = req.body.name;
+  const desc = req.body.req;
+  const price = req.body.price;
+  const stock = req.body.stock;
+
+  const sql =
+    "UPDATE products SET ProductName = ?, ProductDesc = ?, ProductPrice = ?, ProductStock = ? WHERE ProductID = ?";
+
+  db.query(sql, [name, desc, price, stock, id], (err, result) => {
+    if (err) res.send({ err: err });
+    res.send(result);
+  });
+});
+
+//---------------------------COUPON CODES------------------------------
+
 app.get("/api/getCodes", (req, res) => {
   const sql = "SELECT * FROM codes";
 
@@ -183,26 +237,7 @@ app.delete("/api/deleteCode/:codeID", (req, res) => {
   });
 });
 
-app.put("/api/updateAccount", (req, res) => {
-  const userID = req.body.userID;
-  const fName = req.body.fName;
-  const lName = req.body.lName;
-  const email = req.body.email;
-  const pass = req.body.password;
-  const address = req.body.address;
-
-  const sql =
-    "UPDATE users SET FirstName = ?, LastName = ?, Email = ?, Username = ?, Pass = ?, shipAddress = ? WHERE UserID = ?";
-
-  db.query(
-    sql,
-    [fName, lName, email, email, pass, address, userID],
-    (err, result) => {
-      if (err) res.send({ err: err });
-      res.send(result);
-    }
-  );
-});
+//------------------------------CART--------------------------------
 
 app.post("/api/addToCart", (req, res) => {
   const userID = req.body.userID;
@@ -223,28 +258,6 @@ app.post("/api/addToCart", (req, res) => {
       res.send(result);
     }
   );
-});
-
-app.delete("/api/delinstscart/:productID", (req, res) => {
-  const productID = req.params.productID;
-
-  const sql = "DELETE FROM cart WHERE ProductID = ?";
-
-  db.query(sql, productID, (err, result) => {
-    if (err) res.send({ err: err });
-    res.send(result);
-  });
-});
-
-app.delete("/api/deleteProduct/:productID", (req, res) => {
-  const productID = req.params.productID;
-
-  const sql = "DELETE FROM products WHERE ProductID = ?";
-
-  db.query(sql, productID, (err, result) => {
-    if (err) res.send({ err: err });
-    res.send(result);
-  });
 });
 
 app.delete("/api/clearCart/:userID", (req, res) => {
