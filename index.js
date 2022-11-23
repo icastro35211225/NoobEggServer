@@ -295,7 +295,7 @@ app.delete("/api/clearCart/:UserID", (req, res) => {
 });
 
 app.post('/api/getCart', (req, res) => {
-  const UserID = req.body.UserID;
+  const UserID = req.body.userID;
   
   const sql = "SELECT * FROM cart WHERE UserID = ?";
 
