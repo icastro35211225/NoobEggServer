@@ -276,8 +276,8 @@ app.post("/api/addToCart", (req, res) => {
   db.query(select, [productID, UserID], (err, result) => {
     if (err) res.send(err);
 
-    const cartID = result.cartID;
-    const newAmt = parseInt(result.quantity) + parseInt(amount);
+    const cartID = result[0].cartID;
+    const newAmt = parseInt(result[0].quantity) + parseInt(amount);
 
     if (cartID) {
       const sql = "UPDATE cart SET quantity = ? WHERE cartID = ?";
@@ -294,7 +294,6 @@ app.post("/api/addToCart", (req, res) => {
         [UserID, productID, productName, productPrice, productImage, amount],
         (err, result) => {
           if (err) res.send({ err: "INSERTING" + err });
-          res.message = message;
           res.send(result);
         }
       );
