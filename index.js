@@ -269,18 +269,37 @@ app.post("/api/addToCart", (req, res) => {
   const productPrice = req.body.productPrice;
   const productImage = req.body.productImage;
   const amount = req.body.amount;
+  let cartID = "";
+  let oldAmt = 0;
 
-  const sql =
-    "INSERT INTO cart (UserID, ProductID, ProductName, ProductPrice, ProductImage, quantity) VALUES (?, ?, ?, ?, ?, ?)";
+  // Check if product already in cart
+  const select = "SELECT cartID, quantity FROM cart WHERE productID = ?";
+  db.query(select, productID, (err, result) => {
+    if (err) console.log(err);
+    cartID = result.cartID;
+    oldAmt = result.quantity;
+  });
 
-  db.query(
-    sql,
-    [UserID, productID, productName, productPrice, productImage, amount],
-    (err, result) => {
-      if (err) res.send({ err: err });
+  if (cartID) {
+    amount += oldAmt;
+    const sql = "UPDATE cart SET quantity = ? WHERE cartID = ?";
+    db.query(sql, [cartID, amount], (err, result) => {
+      if (err) res.send({ err: "UPDATING " + err });
       res.send(result);
-    }
-  );
+    });
+  } else {
+    const sql =
+      "INSERT INTO cart (UserID, ProductID, ProductName, ProductPrice, ProductImage, quantity) VALUES (?, ?, ?, ?, ?, ?)";
+
+    db.query(
+      sql,
+      [UserID, productID, productName, productPrice, productImage, amount],
+      (err, result) => {
+        if (err) res.send({ err: "INSERTING" + err });
+        res.send(result);
+      }
+    );
+  }
 });
 
 app.delete("/api/clearCart/:UserID", (req, res) => {
