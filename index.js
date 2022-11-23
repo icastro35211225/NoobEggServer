@@ -5,14 +5,13 @@ const mysql = require("mysql");
 const res = require("express/lib/response");
 const { Axios } = require("axios");
 const cors = require("cors");
+
 const db = mysql.createPool({
   host: "database-2.cfjbivvdnqqy.us-east-1.rds.amazonaws.com",
   user: "admin",
   password: "uiMasterPass",
   database: "main",
 });
-
-var corsOptions = {};
 
 app.use(cors());
 app.use(express.static("public"));
@@ -43,8 +42,6 @@ app.post("/api/signup", (req, res) => {
 });
 
 app.post("/api/login", (req, res) => {
-  //res.send({message: "This works"});
-
   const email = req.body.email;
   const password = req.body.password;
 
@@ -299,16 +296,6 @@ app.post("/api/addToCart", (req, res) => {
       );
     }
   });
-
-  // if (cartID) {
-  //   amount += oldAmt;
-  //   const sql = "UPDATE cart SET quantity = ? WHERE cartID = ?";
-  //   db.query(sql, [cartID, amount], (err, result) => {
-  //     if (err) res.send({ err: "UPDATING " + err });
-  //     res.send(result);
-  //   });
-  // if (cartID === "") {
-  // }
 });
 
 app.delete("/api/clearCart/:UserID", (req, res) => {
