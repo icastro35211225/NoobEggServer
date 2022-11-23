@@ -294,6 +294,18 @@ app.delete("/api/clearCart/:userID", (req, res) => {
   });
 });
 
+app.delete("/api/deleteItem/:itemID/:UserID", (req, res) => {
+  const productID = req.params.itemID;
+  const UserID = req.params.UserID;
+
+  const sql = "DELETE FROM cart WHERE ProductID = ? AND UserID = ?";
+
+  db.query(sql, [productID, UserID], (err, result) => {
+    if (err) res.send({ err: err });
+    res.send(result);
+  });
+});
+
 app.listen(80, () => {
   console.log("Running on port 80");
 });
