@@ -269,18 +269,19 @@ app.post("/api/addToCart", (req, res) => {
   const productPrice = req.body.productPrice;
   const productImage = req.body.productImage;
   let amount = req.body.amount;
-  let cartID = "";
+  let cartID;
   let oldAmt = 0;
 
   // Check if product already in cart
-  const select = "SELECT cartID, quantity FROM cart WHERE ProductID = ?";
-  db.query(select, productID, (err, result) => {
+  const select =
+    "SELECT cartID, quantity FROM cart WHERE ProductID = ? AND UserID = ?";
+  db.query(select, [productID, UserID], (err, result) => {
     if (err) res.send(err);
     cartID = result.cartID;
     oldAmt = result.quantity;
   });
 
-  if (cartID != "") {
+  if (cartID) {
     amount += oldAmt;
     const sql = "UPDATE cart SET quantity = ? WHERE cartID = ?";
     db.query(sql, [cartID, amount], (err, result) => {
