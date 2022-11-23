@@ -62,7 +62,7 @@ app.post("/api/login", (req, res) => {
 });
 
 app.put("/api/updateAccount", (req, res) => {
-  const userID = req.body.userID;
+  const UserID = req.body.UserID;
   const fName = req.body.fName;
   const lName = req.body.lName;
   const email = req.body.email;
@@ -74,7 +74,7 @@ app.put("/api/updateAccount", (req, res) => {
 
   db.query(
     sql,
-    [fName, lName, email, email, pass, address, userID],
+    [fName, lName, email, email, pass, address, UserID],
     (err, result) => {
       if (err) res.send({ err: err });
       res.send(result);
@@ -194,7 +194,7 @@ app.post("/api/cart", (req, res) => {
 
 app.get("/api/getUser/:uID", (req, res) => {
   const uID = req.params.uID;
-  const sql = "SELECT *  FROM users WHERE userID = ?";
+  const sql = "SELECT *  FROM users WHERE UserID = ?";
   db.query(sql, [uID], (err, result) => {
     if (err) res.send({ err: err });
     if (result.length > 0) res.send(result);
@@ -263,19 +263,19 @@ app.delete("/api/deleteCode/:codeID", (req, res) => {
 //------------------------------CART--------------------------------
 
 app.post("/api/addToCart", (req, res) => {
-  const userID = req.body.userID;
+  const UserID = req.body.userID;
   const productID = req.body.productID;
   const productName = req.body.productName;
   const productPrice = req.body.productPrice;
   const productImage = req.body.productImage;
-  const ammount = req.body.ammount;
+  const amount = req.body.amount;
 
   const sql =
-    "INSERT INTO cart (userID, ProductID, ProductName, ProductPrice, ProductImage, quantity) VALUES (?, ?, ?, ?, ?, ?)";
+    "INSERT INTO cart (UserID, ProductID, ProductName, ProductPrice, ProductImage, quantity) VALUES (?, ?, ?, ?, ?, ?)";
 
   db.query(
     sql,
-    [userID, productID, productName, productPrice, productImage, ammount],
+    [UserID, productID, productName, productPrice, productImage, amount],
     (err, result) => {
       if (err) res.send({ err: err });
       res.send(result);
@@ -283,10 +283,10 @@ app.post("/api/addToCart", (req, res) => {
   );
 });
 
-app.delete("/api/clearCart/:userID", (req, res) => {
-  const productID = req.params.userID;
+app.delete("/api/clearCart/:UserID", (req, res) => {
+  const productID = req.params.UserID;
 
-  const sql = "DELETE FROM cart WHERE userID = ?";
+  const sql = "DELETE FROM cart WHERE UserID = ?";
 
   db.query(sql, productID, (err, result) => {
     if (err) res.send({ err: err });
@@ -294,6 +294,7 @@ app.delete("/api/clearCart/:userID", (req, res) => {
   });
 });
 
+<<<<<<< HEAD
 app.delete("/api/deleteItem/:itemID/:UserID", (req, res) => {
   const productID = req.params.itemID;
   const UserID = req.params.UserID;
@@ -302,6 +303,15 @@ app.delete("/api/deleteItem/:itemID/:UserID", (req, res) => {
 
   db.query(sql, [productID, UserID], (err, result) => {
     if (err) res.send({ err: err });
+=======
+app.post('/api/getCart', (req, res) => {
+  const UserID = req.body.userID;
+  
+  const sql = "SELECT * FROM cart WHERE UserID = ?";
+
+  db.query(sql, UserID, (err, result) =>{
+    if (err) res.send({ err: err});
+>>>>>>> fa5cd320109eac67a0ff61d960b5351f99689951
     res.send(result);
   });
 });
