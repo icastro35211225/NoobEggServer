@@ -268,9 +268,9 @@ app.post("/api/addToCart", (req, res) => {
   const productName = req.body.productName;
   const productPrice = req.body.productPrice;
   const productImage = req.body.productImage;
-  let amount = req.body.amount;
-  let cartID;
-  let oldAmt = 0;
+  var amount = req.body.amount;
+  var cartID = "";
+  var oldAmt = 0;
 
   // Check if product already in cart
   const select =
@@ -288,7 +288,7 @@ app.post("/api/addToCart", (req, res) => {
       if (err) res.send({ err: "UPDATING " + err });
       res.send(result);
     });
-  } else {
+  } else if (cartID === "") {
     const sql =
       "INSERT INTO cart (UserID, ProductID, ProductName, ProductPrice, ProductImage, quantity) VALUES (?, ?, ?, ?, ?, ?)";
 
