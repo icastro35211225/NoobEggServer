@@ -259,7 +259,7 @@ app.delete("/api/deleteCode/:codeID", (req, res) => {
 
 //------------------------------CART--------------------------------
 
-app.post("/api/addToCart", cors(), (req, res) => {
+app.post("/api/addToCart", (req, res) => {
   const UserID = req.body.userID;
   const productID = req.body.productID;
   const productName = req.body.productName;
@@ -268,34 +268,32 @@ app.post("/api/addToCart", cors(), (req, res) => {
   const amount = req.body.amount;
 
   // Check if product already in cart
-  // const select =
-  //   "SELECT cartID, quantity FROM cart WHERE ProductID = ? AND UserID = ?";
-  // db.query(select, [productID, UserID], (err, result) => {
-  //   if (err) res.send(err);
+  const setData = (result) => {
+    if (result[0].cartID) {
+      const newAmt = parseInt(amount) + parseInt(result[0].quantity);
+      const sql = "UPDATE cart SET quantity = ? WHERE cartID = ?";
+      db.query(sql, [newAmt, result[0].cartID]);
+    } else {
+      const sql =
+        "INSERT INTO cart (UserID, ProductID, ProductName, ProductPrice, ProductImage, quantity) VALUES (?, ?, ?, ?, ?, ?)";
 
-  //   //const cartID = result[0].cartID;
-  //   //const newAmt = parseInt(result[0].quantity) + parseInt(amount);
-
-  //   // if (result[0].cartID != undefined) {
-  //   //   const sql = "UPDATE cart SET quantity = ? WHERE cartID = ?";
-  //   //   db.query(sql, [cartID, newAmt], (err, result) => {
-  //   //     if (err) res.send({ err: "UPDATING " + err });
-  //   //     res.send(result);
-  //   //   });
-  //   // } else {
-  //   // }
-  // });
-  const sql =
-    "INSERT INTO cart (UserID, ProductID, ProductName, ProductPrice, ProductImage, quantity) VALUES (?, ?, ?, ?, ?, ?)";
-
-  db.query(
-    sql,
-    [UserID, productID, productName, productPrice, productImage, amount],
-    (err, result) => {
-      if (err) res.send({ err: "INSERTING" + err });
-      res.send(result);
+      db.query(
+        sql,
+        [UserID, productID, productName, productPrice, productImage, amount],
+        (err, result) => {
+          if (err) res.send({ err: "INSERTING" + err });
+          res.send(result);
+        }
+      );
     }
-  );
+  };
+
+  const select =
+    "SELECT cartID, quantity FROM cart WHERE ProductID = ? AND UserID = ?";
+  db.query(select, [productID, UserID], (err, result) => {
+    if (err) res.send(err);
+    setData(result);
+  });
 });
 
 app.delete("/api/clearCart/:UserID", (req, res) => {
