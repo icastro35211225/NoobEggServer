@@ -259,7 +259,7 @@ app.delete("/api/deleteCode/:codeID", (req, res) => {
 
 //------------------------------CART--------------------------------
 
-app.post("/api/addToCart", (req, res) => {
+app.post("/api/addToCart", cors(), (req, res) => {
   const UserID = req.body.userID;
   const productID = req.body.productID;
   const productName = req.body.productName;
@@ -273,10 +273,10 @@ app.post("/api/addToCart", (req, res) => {
   db.query(select, [productID, UserID], (err, result) => {
     if (err) res.send(err);
 
-    const cartID = result[0].cartID;
-    const newAmt = parseInt(result[0].quantity) + parseInt(amount);
+    //const cartID = result[0].cartID;
+    //const newAmt = parseInt(result[0].quantity) + parseInt(amount);
 
-    if (cartID) {
+    if (result[0].cartID != undefined) {
       const sql = "UPDATE cart SET quantity = ? WHERE cartID = ?";
       db.query(sql, [cartID, newAmt], (err, result) => {
         if (err) res.send({ err: "UPDATING " + err });
