@@ -268,43 +268,48 @@ app.post("/api/addToCart", (req, res) => {
   const productName = req.body.productName;
   const productPrice = req.body.productPrice;
   const productImage = req.body.productImage;
-  var amount = req.body.amount;
-  var cartID = "";
-  var oldAmt = 0;
-  let message = "START\n";
+  const amount = req.body.amount;
 
   // Check if product already in cart
   const select =
     "SELECT cartID, quantity FROM cart WHERE ProductID = ? AND UserID = ?";
   db.query(select, [productID, UserID], (err, result) => {
     if (err) res.send(err);
-    cartID = result.cartID;
-    oldAmt = result.quantity;
-    message + "CardID check\n";
+
+    const cartID = result.cartID;
+    const newAmt = parseInt(result.quantity) + parseInt(amount);
+
+    if (cartID) {
+      const sql = "UPDATE cart SET quantity = ? WHERE cartID = ?";
+      db.query(sql, [cartID, newAmt], (err, result) => {
+        if (err) res.send({ err: "UPDATING " + err });
+        res.send(result);
+      });
+    } else {
+      const sql =
+        "INSERT INTO cart (UserID, ProductID, ProductName, ProductPrice, ProductImage, quantity) VALUES (?, ?, ?, ?, ?, ?)";
+
+      db.query(
+        sql,
+        [UserID, productID, productName, productPrice, productImage, amount],
+        (err, result) => {
+          if (err) res.send({ err: "INSERTING" + err });
+          res.message = message;
+          res.send(result);
+        }
+      );
+    }
   });
 
-  if (cartID) {
-    amount += oldAmt;
-    const sql = "UPDATE cart SET quantity = ? WHERE cartID = ?";
-    db.query(sql, [cartID, amount], (err, result) => {
-      if (err) res.send({ err: "UPDATING " + err });
-      res.send(result);
-      message + "UPDATE\n";
-    });
-  } else if (cartID === "") {
-    const sql =
-      "INSERT INTO cart (UserID, ProductID, ProductName, ProductPrice, ProductImage, quantity) VALUES (?, ?, ?, ?, ?, ?)";
-
-    db.query(
-      sql,
-      [UserID, productID, productName, productPrice, productImage, amount],
-      (err, result) => {
-        if (err) res.send({ err: "INSERTING" + err });
-        res.message = message;
-        res.send(result);
-      }
-    );
-  }
+  // if (cartID) {
+  //   amount += oldAmt;
+  //   const sql = "UPDATE cart SET quantity = ? WHERE cartID = ?";
+  //   db.query(sql, [cartID, amount], (err, result) => {
+  //     if (err) res.send({ err: "UPDATING " + err });
+  //     res.send(result);
+  //   });
+  // if (cartID === "") {
+  // }
 });
 
 app.delete("/api/clearCart/:UserID", (req, res) => {
