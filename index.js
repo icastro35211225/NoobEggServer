@@ -268,12 +268,12 @@ app.post("/api/addToCart", (req, res) => {
   const productName = req.body.productName;
   const productPrice = req.body.productPrice;
   const productImage = req.body.productImage;
-  const amount = req.body.amount;
+  let amount = req.body.amount;
   let cartID = "";
   let oldAmt = 0;
 
   // Check if product already in cart
-  const select = "SELECT cartID, quantity FROM cart WHERE productID = ?";
+  const select = "SELECT cartID, quantity FROM cart WHERE ProductID = ?";
   db.query(select, productID, (err, result) => {
     if (err) console.log(err);
     cartID = result.cartID;
