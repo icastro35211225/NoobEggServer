@@ -268,14 +268,14 @@ app.post("/api/addToCart", (req, res) => {
   const productName = req.body.productName;
   const productPrice = req.body.productPrice;
   const productImage = req.body.productImage;
-  const ammount = req.body.ammount;
+  const ammount = req.body.amount;
 
   const sql =
     "INSERT INTO cart (userID, ProductID, ProductName, ProductPrice, ProductImage, quantity) VALUES (?, ?, ?, ?, ?, ?)";
 
   db.query(
     sql,
-    [userID, productID, productName, productPrice, productImage, ammount],
+    [userID, productID, productName, productPrice, productImage, amount],
     (err, result) => {
       if (err) res.send({ err: err });
       res.send(result);
