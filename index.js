@@ -294,6 +294,17 @@ app.delete("/api/clearCart/:userID", (req, res) => {
   });
 });
 
+app.post('api/getCart', (req, res) => {
+  const userID = req.body.userID;
+  
+  const sql = "SELECT * FROM cart WHERE userID = ?";
+
+  db.query(sql, userID, (err, result) =>{
+    if (err) res.send({ err: err});
+    res.send(result);
+  });
+});
+
 app.listen(80, () => {
   console.log("Running on port 80");
 });
