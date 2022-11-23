@@ -275,7 +275,7 @@ app.post("/api/addToCart", (req, res) => {
   // Check if product already in cart
   const select = "SELECT cartID, quantity FROM cart WHERE ProductID = ?";
   db.query(select, productID, (err, result) => {
-    if (err) console.log(err);
+    if (err) res.send(err);
     cartID = result.cartID;
     oldAmt = result.quantity;
   });
