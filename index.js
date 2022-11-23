@@ -294,7 +294,6 @@ app.delete("/api/clearCart/:UserID", (req, res) => {
   });
 });
 
-<<<<<<< HEAD
 app.delete("/api/deleteItem/:itemID/:UserID", (req, res) => {
   const productID = req.params.itemID;
   const UserID = req.params.UserID;
@@ -303,15 +302,16 @@ app.delete("/api/deleteItem/:itemID/:UserID", (req, res) => {
 
   db.query(sql, [productID, UserID], (err, result) => {
     if (err) res.send({ err: err });
-=======
-app.post('/api/getCart', (req, res) => {
+  });
+});
+
+app.post("/api/getCart", (req, res) => {
   const UserID = req.body.userID;
-  
+
   const sql = "SELECT * FROM cart WHERE UserID = ?";
 
-  db.query(sql, UserID, (err, result) =>{
-    if (err) res.send({ err: err});
->>>>>>> fa5cd320109eac67a0ff61d960b5351f99689951
+  db.query(sql, UserID, (err, result) => {
+    if (err) res.send({ err: err });
     res.send(result);
   });
 });
