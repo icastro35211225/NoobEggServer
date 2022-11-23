@@ -280,7 +280,7 @@ app.post("/api/addToCart", (req, res) => {
     oldAmt = result.quantity;
   });
 
-  if (cartID) {
+  if (cartID != "") {
     amount += oldAmt;
     const sql = "UPDATE cart SET quantity = ? WHERE cartID = ?";
     db.query(sql, [cartID, amount], (err, result) => {
