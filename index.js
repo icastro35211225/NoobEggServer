@@ -263,7 +263,7 @@ app.delete("/api/deleteCode/:codeID", (req, res) => {
 //------------------------------CART--------------------------------
 
 app.post("/api/addToCart", (req, res) => {
-  const UserID = req.body.UserID;
+  const UserID = req.body.userID;
   const productID = req.body.productID;
   const productName = req.body.productName;
   const productPrice = req.body.productPrice;
