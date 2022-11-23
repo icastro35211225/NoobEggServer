@@ -271,6 +271,7 @@ app.post("/api/addToCart", (req, res) => {
   var amount = req.body.amount;
   var cartID = "";
   var oldAmt = 0;
+  let message = "START\n";
 
   // Check if product already in cart
   const select =
@@ -279,6 +280,7 @@ app.post("/api/addToCart", (req, res) => {
     if (err) res.send(err);
     cartID = result.cartID;
     oldAmt = result.quantity;
+    message + "CardID check\n";
   });
 
   if (cartID) {
@@ -287,6 +289,7 @@ app.post("/api/addToCart", (req, res) => {
     db.query(sql, [cartID, amount], (err, result) => {
       if (err) res.send({ err: "UPDATING " + err });
       res.send(result);
+      message + "UPDATE\n";
     });
   } else if (cartID === "") {
     const sql =
@@ -297,6 +300,7 @@ app.post("/api/addToCart", (req, res) => {
       [UserID, productID, productName, productPrice, productImage, amount],
       (err, result) => {
         if (err) res.send({ err: "INSERTING" + err });
+        res.message = message;
         res.send(result);
       }
     );
