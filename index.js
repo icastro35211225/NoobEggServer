@@ -275,10 +275,15 @@ app.post("/api/addToCart", function (req, res, next) {
 
   // Check if product already in cart
   const setData = (result) => {
-    if ("cartID" in result[0]) {
-      const newAmt = parseInt(amount) + parseInt(result[0].quantity);
-      const sql = "UPDATE cart SET quantity = ? WHERE cartID = ?";
-      db.query(sql, [newAmt, result[0].cartID]);
+    if (!result) {
+      if ("cartID" in result[0]) {
+        const newAmt = parseInt(amount) + parseInt(result[0].quantity);
+        const sql = "UPDATE cart SET quantity = ? WHERE cartID = ?";
+        db.query(sql, [newAmt, result[0].cartID], (err, ret) => {
+          if (err) res.send({ err: err });
+          res.send(ret);
+        });
+      }
     } else {
       const sql =
         "INSERT INTO cart (UserID, ProductID, ProductName, ProductPrice, ProductImage, quantity) VALUES (?, ?, ?, ?, ?, ?)";
