@@ -269,7 +269,7 @@ app.post("/api/addToCart", (req, res) => {
 
   // Check if product already in cart
   const setData = (result) => {
-    if (result[0].cartID) {
+    if ("cartID" in result[0]) {
       const newAmt = parseInt(amount) + parseInt(result[0].quantity);
       const sql = "UPDATE cart SET quantity = ? WHERE cartID = ?";
       db.query(sql, [newAmt, result[0].cartID]);
