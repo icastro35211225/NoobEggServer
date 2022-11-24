@@ -18,7 +18,13 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/api/get", (req, res) => {
+app.all("/", function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
+
+app.get("/api/get", (req, res, next) => {
   const sqlSelect = "SELECT * FROM products";
   db.query(sqlSelect, (err, result) => {
     res.send(result);
@@ -27,7 +33,7 @@ app.get("/api/get", (req, res) => {
 
 //---------------------------ACCOUNT-----------------------------------
 
-app.post("/api/signup", (req, res) => {
+app.post("/api/signup", (req, res, next) => {
   const fName = req.body.fName;
   const lName = req.body.lName;
   const email = req.body.email;
@@ -41,7 +47,7 @@ app.post("/api/signup", (req, res) => {
   });
 });
 
-app.post("/api/login", (req, res) => {
+app.post("/api/login", (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
 
@@ -58,7 +64,7 @@ app.post("/api/login", (req, res) => {
   });
 });
 
-app.put("/api/updateAccount", (req, res) => {
+app.put("/api/updateAccount", (req, res, next) => {
   const UserID = req.body.UserID;
   const fName = req.body.fName;
   const lName = req.body.lName;
@@ -81,7 +87,7 @@ app.put("/api/updateAccount", (req, res) => {
 
 //-----------------------------PRODUCTS------------------------------------
 
-app.post("/api/additem", (req, res) => {
+app.post("/api/additem", (req, res, next) => {
   const name = req.body.name;
   const desc = req.body.desc;
   const price = req.body.price;
@@ -108,7 +114,7 @@ app.post("/api/additem", (req, res) => {
   );
 });
 
-app.delete("/api/delete/:itemName", (req, res) => {
+app.delete("/api/delete/:itemName", (req, res, next) => {
   const name = req.params.itemName;
   const sqlDelete = "DELETE FROM Products WHERE ProductName = ?";
 
@@ -117,7 +123,7 @@ app.delete("/api/delete/:itemName", (req, res) => {
   });
 });
 
-app.get("/api/getProduct", (req, res) => {
+app.get("/api/getProduct", (req, res, next) => {
   const id = req.body.id;
   const sql = "SELECT * FROM products WHERE ProductID = ?";
 
@@ -127,7 +133,7 @@ app.get("/api/getProduct", (req, res) => {
   });
 });
 // This is a GET
-app.get("/api/getProduct", (req, res) => {
+app.get("/api/getProduct", (req, res, next) => {
   const id = req.body.id;
   const sql = "SELECT * FROM products WHERE ProductID = ?";
 
@@ -138,7 +144,7 @@ app.get("/api/getProduct", (req, res) => {
 });
 
 // This is a POST
-app.post("/api/getProduct", (req, res) => {
+app.post("/api/getProduct", (req, res, next) => {
   const id = req.body.id;
 
   const sql = "SELECT * FROM products WHERE ProductID = ?";
@@ -149,7 +155,7 @@ app.post("/api/getProduct", (req, res) => {
   });
 });
 
-app.delete("/api/delinstscart/:productID", (req, res) => {
+app.delete("/api/delinstscart/:productID", (req, res, next) => {
   const productID = req.params.productID;
 
   const sql = "DELETE FROM cart WHERE ProductID = ?";
@@ -160,7 +166,7 @@ app.delete("/api/delinstscart/:productID", (req, res) => {
   });
 });
 
-app.delete("/api/deleteProduct/:productID", (req, res) => {
+app.delete("/api/deleteProduct/:productID", (req, res, next) => {
   const productID = req.params.productID;
 
   const sql = "DELETE FROM products WHERE ProductID = ?";
@@ -171,7 +177,7 @@ app.delete("/api/deleteProduct/:productID", (req, res) => {
   });
 });
 
-app.post("/api/cart", (req, res) => {
+app.post("/api/cart", (req, res, next) => {
   const cartItems = req.body.cartItems;
   sqlGet = "select * from products where ProductID = ?";
   products = [];
@@ -189,7 +195,7 @@ app.post("/api/cart", (req, res) => {
   res.send(products);
 });
 
-app.get("/api/getUser/:uID", (req, res) => {
+app.get("/api/getUser/:uID", (req, res, next) => {
   const uID = req.params.uID;
   const sql = "SELECT *  FROM users WHERE UserID = ?";
   db.query(sql, [uID], (err, result) => {
@@ -198,7 +204,7 @@ app.get("/api/getUser/:uID", (req, res) => {
   });
 });
 
-app.get("/api/getOrders/:orderID", (req, res) => {
+app.get("/api/getOrders/:orderID", (req, res, next) => {
   const orderID = req.params.orderID;
   const sql = "SELECT * FROM orders WHERE OrderID = ?";
 
@@ -208,7 +214,7 @@ app.get("/api/getOrders/:orderID", (req, res) => {
   });
 });
 
-app.put("/api/updateProduct", (req, res) => {
+app.put("/api/updateProduct", (req, res, next) => {
   const id = req.body.id;
   const name = req.body.name;
   const desc = req.body.req;
@@ -226,7 +232,7 @@ app.put("/api/updateProduct", (req, res) => {
 
 //---------------------------COUPON CODES------------------------------
 
-app.get("/api/getCodes", (req, res) => {
+app.get("/api/getCodes", (req, res, next) => {
   const sql = "SELECT * FROM codes";
 
   db.query(sql, (err, result) => {
@@ -235,7 +241,7 @@ app.get("/api/getCodes", (req, res) => {
   });
 });
 
-app.post("/api/addCode", (req, res) => {
+app.post("/api/addCode", (req, res, next) => {
   const disCode = req.body.code;
   const mult = req.body.mult;
 
@@ -247,7 +253,7 @@ app.post("/api/addCode", (req, res) => {
   });
 });
 
-app.delete("/api/deleteCode/:codeID", (req, res) => {
+app.delete("/api/deleteCode/:codeID", (req, res, next) => {
   const codeID = req.params.codeID;
   const sql = "DELETE FROM codes WHERE dCode = ?";
 
@@ -259,7 +265,7 @@ app.delete("/api/deleteCode/:codeID", (req, res) => {
 
 //------------------------------CART--------------------------------
 
-app.post("/api/addToCart", (req, res) => {
+app.post("/api/addToCart", (req, res, next) => {
   const UserID = req.body.userID;
   const productID = req.body.productID;
   const productName = req.body.productName;
@@ -296,7 +302,7 @@ app.post("/api/addToCart", (req, res) => {
   });
 });
 
-app.delete("/api/clearCart/:UserID", (req, res) => {
+app.delete("/api/clearCart/:UserID", (req, res, next) => {
   const productID = req.params.UserID;
 
   const sql = "DELETE FROM cart WHERE UserID = ?";
@@ -307,7 +313,7 @@ app.delete("/api/clearCart/:UserID", (req, res) => {
   });
 });
 
-app.delete("/api/deleteItem/:itemID/:UserID", (req, res) => {
+app.delete("/api/deleteItem/:itemID/:UserID", (req, res, next) => {
   const productID = req.params.itemID;
   const UserID = req.params.UserID;
 
@@ -318,7 +324,7 @@ app.delete("/api/deleteItem/:itemID/:UserID", (req, res) => {
   });
 });
 
-app.post("/api/getCart", (req, res) => {
+app.post("/api/getCart", (req, res, next) => {
   const UserID = req.body.userID;
 
   const sql = "SELECT * FROM cart WHERE UserID = ?";
