@@ -79,7 +79,7 @@ app.put("/api/updateAccount", (req, res, next) => {
   const address = req.body.address;
 
   const sqlInsert =
-    "UPDATE users SET FirstName = ?, LastName = ?, Email = ?, Pass = ?, Username = ?, shipAddress = ? WHERE UserID = ?;";
+    "UPDATE users SET FirstName = ?, LastName = ?, Email = ?, Pass = ?, Username = ?, shipAddress = ? WHERE UserID = ?";
   db.query(
     sqlInsert,
     [fName, lName, email, password, email, address, userID],
