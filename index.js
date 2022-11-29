@@ -33,6 +33,14 @@ app.get("/api/get", (req, res, next) => {
 
 //---------------------------ACCOUNT-----------------------------------
 
+app.get("/api/getAllAccounts", (req, res, next) => {
+  const sql = "Select * from users";
+  db.query(sql, (err, result) => {
+    if (err) res.send({ err: err });
+    res.send(result);
+  });
+});
+
 app.post("/api/signup", (req, res, next) => {
   const fName = req.body.fName;
   const lName = req.body.lName;
