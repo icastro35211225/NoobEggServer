@@ -373,6 +373,27 @@ app.post("/api/getCart", (req, res, next) => {
   });
 });
 
+//-------------------------ORDERS--------------------------
+app.post("/api/addToOrders", (req, res) => {
+  const userID = req.body.userID;
+  const shipping = req.body.shipping;
+  const products = req.body.products;
+  const subtotal = req.body.subtotal;
+  const tax = req.body.tax;
+  const total = req.body.total;
+
+  const sql =
+    "INSERT INTO orders(UserID, shipAddress, products, subtotal, tax, OrderTotal) VALUES (?, ?, ?, ?, ?, ?);";
+  db.query(
+    sql,
+    [userID, shipping, products, subtotal, tax, total],
+    (err, result) => {
+      if (err) res.send({ err: err });
+      res.send(result);
+    }
+  );
+});
+
 app.listen(80, () => {
   console.log("Running on port 80");
 });
