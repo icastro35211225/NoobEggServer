@@ -59,7 +59,7 @@ app.post("/api/signup", (req, res, next) => {
   const address = req.body.address;
 
   const sqlInsert =
-    "INSERT INTO users (FirstName, LastName, Email, Pass, Username, shipAddress) VALUES (?, ?, ?, ?, ?);";
+    "INSERT INTO users (FirstName, LastName, Email, Pass, Username, shipAddress) VALUES (?, ?, ?, ?, ?, ?);";
   db.query(
     sqlInsert,
     [fName, lName, email, password, email, address],
