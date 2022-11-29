@@ -407,7 +407,7 @@ app.post("/api/addToOrders", (req, res) => {
 app.get("/api/getUserOrders/:uID", (req, res, next) => {
   const userID = req.params.uID;
 
-  const sql = "SELECT * FROM orders WHERE UserID = ?";
+  const sql = "SELECT * FROM orders WHERE OrderUserID = ?";
   db.query(sql, userID, (err, result) => {
     if (err) res.send({ err: err });
     res.send(result);
