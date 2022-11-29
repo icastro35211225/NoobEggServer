@@ -393,7 +393,7 @@ app.post("/api/addToOrders", (req, res) => {
   const total = req.body.total;
 
   const sql =
-    "INSERT INTO orders(UserID, shipAddress, Products, subtotal, tax, OrderTotal) VALUES (?, ?, ?, ?, ?, ?);";
+    "INSERT INTO orders(OrderUserID, shipAddress, Products, subtotal, tax, OrderTotal) VALUES (?, ?, ?, ?, ?, ?);";
   db.query(
     sql,
     [userID, shipping, products, subtotal, tax, total],
