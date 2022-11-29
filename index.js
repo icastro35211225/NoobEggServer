@@ -41,6 +41,16 @@ app.get("/api/getAllAccounts", (req, res, next) => {
   });
 });
 
+app.get("/api/getUser/:uID", (req, res, next) => {
+  const userID = req.params.uID;
+
+  const sql = "SELEC * FROM users where UserID = ?";
+  db.query(sql, userID, (err, result) => {
+    if (err) res.send({ err: err });
+    res.send(result);
+  });
+});
+
 app.post("/api/signup", (req, res, next) => {
   const fName = req.body.fName;
   const lName = req.body.lName;
@@ -399,6 +409,17 @@ app.get("/api/getUserOrders/:uID", (req, res, next) => {
 
   const sql = "SELECT * FROM orders WHERE UserID = ?";
   db.query(sql, userID, (err, result) => {
+    if (err) res.send({ err: err });
+    res.send(result);
+  });
+});
+
+app.get("api/getOder/:orderID", (req, res, next) => {
+  const orderID = req.params.orderID;
+
+  const sql = "SELECT * FROM orders where OrderID = ?";
+
+  db.query(sql, orderID, (err, result) => {
     if (err) res.send({ err: err });
     res.send(result);
   });
