@@ -60,6 +60,26 @@ app.post("/api/signup", (req, res, next) => {
   );
 });
 
+app.post("/api/updateAccount", (req, res, next) => {
+  const userID = req.body.userID;
+  const fName = req.body.fName;
+  const lName = req.body.lName;
+  const email = req.body.email;
+  const password = req.body.password;
+  const address = req.body.address;
+
+  const sqlInsert =
+    "UPDATE users set FirstName = ?, LastName = ?, Email = ?, Pass = ?, Username = ?, shipAddress = ? WHERE UserID = ?;";
+  db.query(
+    sqlInsert,
+    [fName, lName, email, password, email, address, userID],
+    (err, result) => {
+      if (err) throw err;
+      else console.log(result);
+    }
+  );
+});
+
 app.post("/api/login", (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
