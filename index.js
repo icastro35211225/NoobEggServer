@@ -84,7 +84,7 @@ app.put("/api/updateAccount", (req, res, next) => {
     sqlInsert,
     [fName, lName, email, password, email, address, userID],
     (err, result) => {
-      if (err) throw err;
+      if (err) res.send({ err: err });
       res.send(result);
     }
   );
