@@ -46,13 +46,18 @@ app.post("/api/signup", (req, res, next) => {
   const lName = req.body.lName;
   const email = req.body.email;
   const password = req.body.password;
+  const address = req.body.address;
 
   const sqlInsert =
-    "INSERT INTO users (FirstName, LastName, Email, Pass, Username) VALUES (?, ?, ?, ?, ?);";
-  db.query(sqlInsert, [fName, lName, email, password, email], (err, result) => {
-    if (err) throw err;
-    else console.log(result);
-  });
+    "INSERT INTO users (FirstName, LastName, Email, Pass, Username, shipAddress) VALUES (?, ?, ?, ?, ?);";
+  db.query(
+    sqlInsert,
+    [fName, lName, email, password, email, address],
+    (err, result) => {
+      if (err) throw err;
+      else console.log(result);
+    }
+  );
 });
 
 app.post("/api/login", (req, res, next) => {
