@@ -414,7 +414,7 @@ app.get("/api/getUserOrders/:uID", (req, res, next) => {
   });
 });
 
-app.get("/api/getOder/:orderID", (req, res, next) => {
+app.get("/api/getOrder/:orderID", (req, res, next) => {
   const orderID = req.params.orderID;
 
   const sql = "SELECT * FROM orders where OrderID = ?";
