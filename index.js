@@ -44,7 +44,7 @@ app.get("/api/getAllAccounts", (req, res, next) => {
 app.get("/api/getUser/:uID", (req, res, next) => {
   const userID = req.params.uID;
 
-  const sql = "SELEC * FROM users where UserID = ?";
+  const sql = "SELECT * FROM users where UserID = ?";
   db.query(sql, userID, (err, result) => {
     if (err) res.send({ err: err });
     res.send(result);
