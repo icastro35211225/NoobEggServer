@@ -425,6 +425,15 @@ app.get("/api/getOrder/:orderID", (req, res, next) => {
   });
 });
 
+app.get("/api/getAllOrders", (req, res, next) => {
+  const sql = "SELECT * FROM orders";
+
+  db.query(sql, (err, result) => {
+    if (err) res.send({ err: err });
+    res.send(result);
+  });
+});
+
 app.listen(80, () => {
   console.log("Running on port 80");
 });
